@@ -1,0 +1,94 @@
+{
+    "name": "ansible-network",
+    "description": "Testing locally",
+    "version": "1.0",
+    "channels": {
+        "common": {
+            "orderers": [
+                "orderer0.stavanger.no"
+            ],
+            "peers": {
+                "peer0.spain.es": {
+                    "endorsingPeer": true,
+                    "chaincodeQuery": true,
+                    "ledgerQuery": true,
+                    "eventSource": true
+                },
+                "peer0.netherlands.nl": {
+                    "endorsingPeer": true,
+                    "chaincodeQuery": true,
+                    "ledgerQuery": true,
+                    "eventSource": true
+                }
+            }
+        }
+    },
+    "organizations": {
+        "Spain": {
+            "mspid": "SpainMSP",
+            "peers": [
+                "peer0.spain.es"
+            ],
+            "certificateAuthorities": [
+                "ca-Spain"
+            ]
+        },
+        "Netherlands": {
+            "mspid": "NetherlandsMSP",
+            "peers": [
+                "peer0.netherlands.nl"
+            ],
+            "certificateAuthorities": [
+                "ca-Netherlands"
+            ]
+        }
+    },
+    "orderers": {
+        "orderer0.stavanger.no": {
+            "url": "grpc://172.17.0.3:32000"
+        }
+    },
+    "peers": {
+        "peer0.spain.es": {
+            "url": "grpc://172.17.0.3:30001",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.spain.es"
+            }
+        },
+
+        "peer0.netherlands.nl": {
+            "url": "grpc://172.17.0.3:30000",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.netherlands.nl"
+            }
+        }
+    },
+    "certificateAuthorities": {
+        "ca-Spain": {
+            "url": "http://172.17.0.3:31701",
+            "httpOptions": {
+                "verify": false
+            },
+            "registrar": [
+                {
+                    "enrollId": "admin",
+                    "enrollSecret": "adminpw"
+                }
+            ],
+            "caName": "ca-Spain"
+        },
+        "ca-Netherlands": {
+            "url": "http://172.17.0.3:31700",
+            "httpOptions": {
+                "verify": false
+            },
+            "registrar": [
+                {
+                    "enrollId": "admin",
+                    "enrollSecret": "adminpw"
+                }
+            ],
+            "caName": "ca-Netherlands"
+        }
+    }
+}

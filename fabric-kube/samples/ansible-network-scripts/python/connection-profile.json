@@ -1,0 +1,77 @@
+{
+    "name": "ansible-network",
+    "description": "Testing locally",
+    "version": "1.0",
+    "channels": {
+        "common": {
+            "orderers": [
+                "orderer0.stavanger.no"
+            ],
+            "peers": {
+                "peer0.spain.es": null,
+                "peer0.netherlands.nl": null
+            }
+        }
+    },
+    "organizations": {
+        "Spain": {
+            "mspid": "SpainMSP",
+            "peers": [
+                "peer0.spain.es"
+            ],
+            "certificateAuthorities": [
+                "ca-Spain"
+            ]
+        },
+        "Netherlands": {
+            "mspid": "NetherlandsMSP",
+            "peers": [
+                "peer0.netherlands.nl"
+            ],
+            "certificateAuthorities": [
+                "ca-Netherlands"
+            ]
+        }
+    },
+    "orderers": {
+        "orderer0.stavanger.no": {
+            "url": "grpc://192.168.39.220:32000"
+        }
+    },
+    "peers": {
+        "peer0.spain.es": {
+            "url": "grpc://192.168.39.220:30001"
+        },
+        "peer0.netherlands.nl": {
+            "url": "grpc://192.168.39.220:30000"
+        }
+    },
+    "certificateAuthorities": {
+        "ca-Spain": {
+            "url": "http://192.168.39.220:31701",
+            "httpOptions": {
+                "verify": false
+            },
+            "registrar": [
+                {
+                    "enrollId": "admin",
+                    "enrollSecret": "adminpw"
+                }
+            ],
+            "caName": "ca-Spain"
+        },
+        "ca-Netherlands": {
+            "url": "http://192.168.39.220:31700",
+            "httpOptions": {
+                "verify": false
+            },
+            "registrar": [
+                {
+                    "enrollId": "admin",
+                    "enrollSecret": "adminpw"
+                }
+            ],
+            "caName": "ca-Netherlands"
+        }
+    }
+}
