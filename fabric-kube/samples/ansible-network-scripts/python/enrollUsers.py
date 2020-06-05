@@ -2,7 +2,7 @@ from hfc.fabric_network import wallet
 from hfc.fabric_ca.caservice import CAClient, CAService
 
 # Netherlands user
-casvc = CAService(target="http://192.168.39.246:31700")
+casvc = CAService(target="http://192.168.39.209:31700")
 adminNlEnrollment = casvc.enroll("admin", "adminpw") # now local will have the admin enrollment
 secret = adminNlEnrollment.register("user1Nl") # register a user to ca
 user1NlEnrollment = casvc.enroll("user1Nl", secret) # now local will have the user enrollment

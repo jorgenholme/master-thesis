@@ -1,6 +1,6 @@
-// const { Contract }=require("fabric-contract-api");
-// const crypto = require("crypto");
 const shim = require('fabric-shim');
+const crypto = require('crypto');
+
 
 const Chaincode = class {
 
@@ -11,20 +11,58 @@ const Chaincode = class {
 
     async Invoke(stub) {
       
+      const funcAndPar = stub.getFunctionAndParameters();
+      const func = this[funcAndPar.fcn];
 
-      let cid = new shim.ClientIdentity(stub);
+      if (!func) {
+        return shim.error(`Received unknown function ${funcAndPar.fcn} invocation`);
+      }
+
+      try {
+        const payload = await func(stub);
+        return shim.success(payload);
+      } catch (err) {
+        return shim.error(err);
+      }
+
+    }
+
+    async grantAccess(stub) {
+      const cid = new shim.ClientIdentity(stub);
 
       const dateTime = new Date().toLocaleString();
-      const uid = cid.getID();
-      const digest = dateTime.concat(uid);
-    //   const digest = crypto.createHash("sha256").update(valToHash).digest("hex");
+      const userId = cid.getID();
+      const valToHash = dateTime.concat(userId);
+      const digest = crypto.createHash("sha256").update(valToHash).digest("hex");
 
-      await stub.putState(uid, Buffer.from(digest));
+      await stub.putState(userId, Buffer.from(digest));
 
-      return shim.success(Buffer.from(digest.toString()))
+      const payload = Buffer.from(digest.toString());
 
-    
-        
+      return payload;
+    }
+
+    async query(stub) {
+      const cid = new shim.ClientIdentity(stub);
+
+      const userId = cid.getID();
+      const otc = await stub.getState(userId);
+      if (!otc || otc.length === 0) {
+        throw new Error(`${userId} does not exist`);
+      }
+
+      const payload = Buffer.from(otc.toString());
+
+      return payload;
+    }
+
+
+
+};
+
+module.exports = Chaincode;
+
+
       // if ( cid.assertAttributeValue("hf.role", "client") ) {
       //     const dateTime = new Date().toLocaleString();
       //     const id = cid.getID();
@@ -33,9 +71,3 @@ const Chaincode = class {
       //     const digest = crypto.createHash("sha256").update(valToHash).digest("hex")
 
       //  }
-
-      }
-
-};
-
-module.exports = Chaincode;

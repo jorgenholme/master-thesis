@@ -28,28 +28,22 @@ async function main() {
         const gateway = new Gateway();
         await gateway.connect(ccp, { wallet, identity: user, discovery: { enabled: false, asLocalhost: true } });
 
-        
         // Get the network (channel) our contract is deployed to.
         const network = await gateway.getNetwork('common');
-        
-
 
         // Get the contract from the network.
         const contract = network.getContract('access-chaincode');
 
-        // Submit the specified transaction.
-        // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
-        // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR12', 'Dave')
-        
-        const result = await contract.submitTransaction('grantAccess');
-        console.log(result.toString())
-        console.log('Transaction has been submitted');
+        // Evaluate the specified transaction.
+        const result = await contract.evaluateTransaction('query');
+
+        console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
 
         // Disconnect from the gateway.
         await gateway.disconnect();
-
+        
     } catch (error) {
-        console.error(`Failed to submit transaction: ${error}`);
+        console.error(`Failed to evaluate transaction: ${error}`);
         process.exit(1);
     }
 }

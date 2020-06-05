@@ -90,7 +90,7 @@ Organizations:
                 Rule: "OR('NetherlandsMSP.admin', 'NetherlandsMSP.peer', 'NetherlandsMSP.client')"
             Writers:
                 Type: Signature
-                Rule: "OR('NetherlandsMSP.admin', 'NetherlandsMSP.client')"
+                Rule: "OR('NetherlandsMSP.admin', 'NetherlandsMSP.client', 'NetherlandsMSP.peer')"
             Admins:
                 Type: Signature
                 Rule: "OR('NetherlandsMSP.admin')"
@@ -121,7 +121,7 @@ Organizations:
                 Rule: "OR('SpainMSP.admin', 'SpainMSP.peer', 'SpainMSP.client')"
             Writers:
                 Type: Signature
-                Rule: "OR('SpainMSP.admin', 'SpainMSP.client')"
+                Rule: "OR('SpainMSP.admin', 'SpainMSP.client', 'SpainMSP.peer')"
             Admins:
                 Type: Signature
                 Rule: "OR('SpainMSP.admin')"

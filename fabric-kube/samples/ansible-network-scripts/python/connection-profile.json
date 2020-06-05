@@ -2,15 +2,17 @@
     "name": "ansible-network",
     "description": "Testing locally",
     "version": "1.0",
+
     "channels": {
         "common": {
             "orderers": [
                 "orderer0.stavanger.no"
             ],
             "peers": {
-                "peer0.spain.es": null,
-                "peer0.netherlands.nl": null
+                "peer0.spain.es": {},
+                "peer0.netherlands.nl": {}
             }
+
         }
     },
     "organizations": {
@@ -21,7 +23,13 @@
             ],
             "certificateAuthorities": [
                 "ca-Spain"
-            ]
+            ],
+            "adminPrivateKey": {
+                "path": "/home/jorgen/Documents/PIVT/fabric-kube/samples/ansible-network/crypto-config/peerOrganizations/spain.es/users/Admin@spain.es/msp/keystore/priv_sk"
+            },
+            "signedCert": {
+                "path": "/home/jorgen/Documents/PIVT/fabric-kube/samples/ansible-network/crypto-config/peerOrganizations/spain.es/users/Admin@spain.es/msp/signcerts/Admin@spain.es-cert.pem"
+            }
         },
         "Netherlands": {
             "mspid": "NetherlandsMSP",
@@ -30,25 +38,50 @@
             ],
             "certificateAuthorities": [
                 "ca-Netherlands"
-            ]
+            ],
+            "adminPrivateKey": {
+                "path": "/home/jorgen/Documents/PIVT/fabric-kube/samples/ansible-network/crypto-config/peerOrganizations/netherlands.nl/users/Admin@netherlands.nl/msp/keystore/priv_sk"
+            },
+            "signedCert": {
+                "path": "/home/jorgen/Documents/PIVT/fabric-kube/samples/ansible-network/crypto-config/peerOrganizations/netherlands.nl/users/Admin@netherlands.nl/msp/signcerts/Admin@netherlands.nl-cert.pem"
+            }
         }
     },
     "orderers": {
         "orderer0.stavanger.no": {
-            "url": "grpc://192.168.39.220:32000"
+            "url": "grpc://192.168.39.209:32700",
+            "tlsCACerts": {
+                "path": "/home/jorgen/Documents/PIVT/fabric-kube/samples/ansible-network/crypto-config/ordererOrganizations/stavanger.no/orderers/orderer0.stavanger.no/msp/tlscacerts/tlsca.stavanger.no-cert.pem"
+            },
+            "grpcOptions": {
+                "ssl-target-name-override": "orderer0.stavanger.no",
+                "grpc.keepalive_time_ms": 600000
+            }
         }
     },
     "peers": {
         "peer0.spain.es": {
-            "url": "grpc://192.168.39.220:30001"
+            "url": "grpc://192.168.39.209:30001",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.spain.es",
+                "grpc.keepalive_time_ms": 600000
+            }
         },
+
         "peer0.netherlands.nl": {
-            "url": "grpc://192.168.39.220:30000"
+            "url": "grpc://192.168.39.209:30000",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.netherlands.nl",
+                "grpc.keepalive_time_ms": 600000
+            }
         }
     },
     "certificateAuthorities": {
         "ca-Spain": {
-            "url": "http://192.168.39.220:31701",
+            "url": "http://192.168.39.209:31701",
+            "tlsCACerts": {
+                "path": "/home/jorgen/Documents/PIVT/fabric-kube/samples/ansible-network/crypto-config/peerOrganizations/spain.es/tlsca/tlsca.spain.es-cert.pem"
+            },
             "httpOptions": {
                 "verify": false
             },
@@ -61,7 +94,10 @@
             "caName": "ca-Spain"
         },
         "ca-Netherlands": {
-            "url": "http://192.168.39.220:31700",
+            "url": "http://192.168.39.209:31700",
+            "tlsCACerts": {
+                "path": "/home/jorgen/Documents/PIVT/fabric-kube/samples/ansible-network/crypto-config/peerOrganizations/netherlands.nl/tlsca/tlsca.netherlands.nl-cert.pem"
+            },
             "httpOptions": {
                 "verify": false
             },

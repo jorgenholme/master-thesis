@@ -6,7 +6,8 @@ from hfc.fabric.transaction.tx_proposal_request import create_tx_prop_req, CC_IN
 
 loop = asyncio.get_event_loop()
 
-cli = Client(net_profile="connection-profile3.json")
+cli = Client(net_profile="connection-profile.json")
+
 # NlClient = cli.get_user('netherlands.nl', 'user1Nl')
 
 fs_wallet = wallet.FileSystenWallet("./tmp/hfc-kvs") # Opens wallet at ./tmp/hfc-kvs
@@ -24,8 +25,9 @@ response = loop.run_until_complete(cli.chaincode_invoke(
                channel_name='common',
                peers=['peer0.netherlands.nl'],
                args=args,
-               cc_name='very-simple',
+               cc_name='access-chaincode',
                cc_type=CC_TYPE_NODE,
+               wait_for_event_timeout=3000,
                transient_map=None, # optional, for private data
                wait_for_event=True # for being sure chaincode invocation has been commited in the ledger, default is on tx event
                #cc_pattern='^invoked*' # if you want to wait for chaincode event and you have a `stub.SetEvent("invoked", value)` in your chaincode

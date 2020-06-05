@@ -18,7 +18,7 @@ spec:
   - protocol: TCP
     port: 7050
     name: grpc
-    nodePort: 3200{{ $i | int }}
+    nodePort: 3270{{ $i | int }}
   {{- if $.Values.orderer.cluster.enabled }}
   - protocol: TCP
     port: {{ $.Values.orderer.cluster.port }}
