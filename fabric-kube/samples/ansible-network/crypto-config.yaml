@@ -5,8 +5,8 @@ OrdererOrgs:
   # ---------------------------------------------------------------------------
   # Orderer
   # ---------------------------------------------------------------------------
-  - Name: Stavanger
-    Domain: stavanger.no
+  - Name: OrdererOrg
+    Domain: ordererOrg.com
     EnableNodeOUs: true
     Specs:
       - Hostname: orderer0
@@ -14,13 +14,13 @@ OrdererOrgs:
 # "PeerOrgs" - Definition of organizations managing peer nodes
 # ---------------------------------------------------------------------------
 PeerOrgs:
-  # - Name: Stavanger
-  #   Domain: stavanger.no
-  #   EnableNodeOUs: true
-  #   Template:
-  #     Count: 1
-  #   Users:
-  #     Count: 1
+  - Name: Stavanger
+    Domain: stavanger.no
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+    Users:
+      Count: 1
   
   - Name: Netherlands
     Domain: netherlands.nl

@@ -1,7 +1,7 @@
 {
-	"name": "access-chaincode",
+	"name": "access-results",
 	"version": "1.0.0",
-	"description": "Chaincode for accessing remote resources",
+	"description": "Chaincode for accessing results in PDCs",
 	"engines": {
 		"node": ">=8.4.0",
 		"npm": ">=5.3.0"

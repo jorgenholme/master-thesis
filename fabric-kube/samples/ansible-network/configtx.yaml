@@ -12,6 +12,33 @@ Organizations:
 
     # SampleOrg defines an MSP using the sampleconfig.  It should never be used
     # in production but may be used as a template for other definitions
+    - &OrdererOrg
+        # DefaultOrg defines the organization which is used in the sampleconfig
+        # of the fabric.git development environment
+        Name: OrdererOrgMSP
+
+        # ID to load the MSP definition as
+        ID: OrdererOrgMSP
+
+        # MSPDir is the filesystem path which contains the MSP configuration
+        MSPDir: crypto-config/ordererOrganizations/ordererOrg.com/msp
+
+        # Policies defines the set of policies at this level of the config tree
+        # For organization policies, their canonical path is usually
+        #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('OrdererOrgMSP.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('OrdererOrgMSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('OrdererOrgMSP.admin')"
+
+
+
     - &Stavanger
         # DefaultOrg defines the organization which is used in the sampleconfig
         # of the fabric.git development environment
@@ -20,8 +47,7 @@ Organizations:
         # ID to load the MSP definition as
         ID: StavangerMSP
 
-        # MSPDir is the filesystem path which contains the MSP configuration
-        MSPDir: crypto-config/ordererOrganizations/stavanger.no/msp
+        MSPDir: crypto-config/peerOrganizations/stavanger.no/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -29,46 +55,20 @@ Organizations:
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('StavangerMSP.member')"
+                Rule: "OR('StavangerMSP.admin', 'StavangerMSP.peer', 'StavangerMSP.client')"
             Writers:
                 Type: Signature
-                Rule: "OR('StavangerMSP.member')"
+                Rule: "OR('StavangerMSP.admin', 'StavangerMSP.client', 'StavangerMSP.peer')"
             Admins:
                 Type: Signature
                 Rule: "OR('StavangerMSP.admin')"
 
-
-
-    # - &Stavanger
-    #     # DefaultOrg defines the organization which is used in the sampleconfig
-    #     # of the fabric.git development environment
-    #     Name: StavangerMSP
-
-    #     # ID to load the MSP definition as
-    #     ID: StavangerMSP
-
-    #     MSPDir: crypto-config/peerOrganizations/stavanger.no/msp
-
-    #     # Policies defines the set of policies at this level of the config tree
-    #     # For organization policies, their canonical path is usually
-    #     #   /Channel/<Application|Orderer>/<OrgName>/<PolicyName>
-    #     Policies:
-    #         Readers:
-    #             Type: Signature
-    #             Rule: "OR('StavangerMSP.admin', 'StavangerMSP.peer', 'StavangerMSP.client')"
-    #         Writers:
-    #             Type: Signature
-    #             Rule: "OR('StavangerMSP.admin', 'StavangerMSP.client')"
-    #         Admins:
-    #             Type: Signature
-    #             Rule: "OR('StavangerMSP.admin')"
-
-    #     AnchorPeers:
-    #         # AnchorPeers defines the location of peers which can be used
-    #         # for cross org gossip communication.  Note, this value is only
-    #         # encoded in the genesis block in the Application section context
-    #         - Host: hlf-peer--stavanger--peer0
-    #           Port: 7051
+        AnchorPeers:
+            # AnchorPeers defines the location of peers which can be used
+            # for cross org gossip communication.  Note, this value is only
+            # encoded in the genesis block in the Application section context
+            - Host: hlf-peer--stavanger--peer0
+              Port: 7051
 
 
     - &Netherlands
@@ -236,7 +236,7 @@ Orderer: &OrdererDefaults
     OrdererType: solo
 
     Addresses:
-        - hlf-orderer--stavanger--orderer0:7050
+        - hlf-orderer--ordererOrg--orderer0:7050
 
     # Batch Timeout: The amount of time to wait before creating a batch
     BatchTimeout: 1s
@@ -332,12 +332,12 @@ Profiles:
         Orderer:
             <<: *OrdererDefaults
             Organizations:
-                - *Stavanger
+                - *OrdererOrg
                           
         Consortiums:
             DataProviders:
                 Organizations:
-                    # - *Stavanger
+                    - *Stavanger
                     - *Netherlands
                     - *Spain
 
@@ -347,15 +347,7 @@ Profiles:
         Application:
             <<: *ApplicationDefaults
             Organizations:
-                # - *Stavanger
+                - *Stavanger
                 - *Netherlands
                 - *Spain
 
-    # private-karga-atlantis:
-    #     Consortium: TheConsortium
-    #     <<: *ChannelDefaults
-    #     Application:
-    #         <<: *ApplicationDefaults
-    #         Organizations:
-    #             - *Karga
-    #             - *Atlantis

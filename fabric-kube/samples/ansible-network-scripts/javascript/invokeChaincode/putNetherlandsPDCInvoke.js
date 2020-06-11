@@ -1,22 +1,22 @@
 'use strict';
 
-const { Gateway, Wallets } = require('fabric-network');
+const { Gateway, FileSystemWallet } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
 
 async function main() {
     try {
         // load the network configuration
-        let ccp = JSON.parse(fs.readFileSync('connection-profile.json', 'utf8'));
-        const user = "admin";
+        let ccp = JSON.parse(fs.readFileSync('../connection-profile.json', 'utf8'));
+        const user = "AdminNetherlands";
 
         // Create a new file system based wallet for managing identities.
-        const walletPath = path.join(process.cwd(), 'wallet');
-        const wallet = await Wallets.newFileSystemWallet(walletPath);
+        const walletPath = path.join(process.cwd(), '../wallet');
+        const wallet = new FileSystemWallet(walletPath);
         // console.log(`Wallet path: ${walletPath}`);
 
         // Check to see if we've already enrolled the user.
-        const identity = await wallet.get(user);
+        const identity = await wallet.export(user);
         if (!identity) {
             console.log('An identity for the user "admin" does not exist in the wallet');
             console.log('Run the registerUser.js application before retrying');
@@ -31,17 +31,14 @@ async function main() {
         
         // Get the network (channel) our contract is deployed to.
         const network = await gateway.getNetwork('common');
-        
 
 
         // Get the contract from the network.
         const contract = network.getContract('access-chaincode');
 
         // Submit the specified transaction.
-        // createCar transaction - requires 5 argument, ex: ('createCar', 'CAR12', 'Honda', 'Accord', 'Black', 'Tom')
-        // changeCarOwner transaction - requires 2 args , ex: ('changeCarOwner', 'CAR12', 'Dave')
         
-        const result = await contract.submitTransaction('grantAccess');
+        const result = await contract.submitTransaction('putPrivateNetherlandsCollection', 'heisann');
         console.log(result.toString())
         console.log('Transaction has been submitted');
 

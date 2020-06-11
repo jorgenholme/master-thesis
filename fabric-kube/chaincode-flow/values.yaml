@@ -43,13 +43,13 @@ flow:
     parallel: true
   instantiate:
     # should we run instantiate/upgrade step?
-    enabled: true  
-    parallel: true
+    enabled: false  
+    parallel: false
   invoke:
     # should we run invoke step? 
     # we invoke chaincode after instantiate/upgrade to force the peers to actually create the chaincode containers
-    enabled: true 
-    parallel: true
+    enabled: false 
+    parallel: false
     function: '{"function":"ping","Args":[""]}'
 
 chaincode:

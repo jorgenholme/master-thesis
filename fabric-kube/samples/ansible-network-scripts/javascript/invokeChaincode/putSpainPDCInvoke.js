@@ -1,22 +1,22 @@
 'use strict';
 
-const { Gateway, Wallets } = require('fabric-network');
+const { Gateway, FileSystemWallet } = require('fabric-network');
 const fs = require('fs');
 const path = require('path');
 
 async function main() {
     try {
         // load the network configuration
-        let ccp = JSON.parse(fs.readFileSync('connection-profile.json', 'utf8'));
-        const user = "admin";
+        let ccp = JSON.parse(fs.readFileSync('../connection-profile.json', 'utf8'));
+        const user = "AdminSpain";
 
         // Create a new file system based wallet for managing identities.
-        const walletPath = path.join(process.cwd(), 'wallet');
-        const wallet = await Wallets.newFileSystemWallet(walletPath);
+        const walletPath = path.join(process.cwd(), '../wallet');
+        const wallet = new FileSystemWallet(walletPath);
         // console.log(`Wallet path: ${walletPath}`);
 
         // Check to see if we've already enrolled the user.
-        const identity = await wallet.get(user);
+        const identity = await wallet.export(user);
         if (!identity) {
             console.log('An identity for the user "admin" does not exist in the wallet');
             console.log('Run the registerUser.js application before retrying');
@@ -28,22 +28,25 @@ async function main() {
         const gateway = new Gateway();
         await gateway.connect(ccp, { wallet, identity: user, discovery: { enabled: false, asLocalhost: true } });
 
+        
         // Get the network (channel) our contract is deployed to.
         const network = await gateway.getNetwork('common');
+
 
         // Get the contract from the network.
         const contract = network.getContract('access-chaincode');
 
-        // Evaluate the specified transaction.
-        const result = await contract.evaluateTransaction('query');
-
-        console.log(`Transaction has been evaluated, result is: ${result.toString()}`);
+        // Submit the specified transaction.
+        
+        const result = await contract.submitTransaction('putPrivateSpainCollection', 'heisann');
+        console.log(result.toString())
+        console.log('Transaction has been submitted');
 
         // Disconnect from the gateway.
         await gateway.disconnect();
-        
+
     } catch (error) {
-        console.error(`Failed to evaluate transaction: ${error}`);
+        console.error(`Failed to submit transaction: ${error}`);
         process.exit(1);
     }
 }

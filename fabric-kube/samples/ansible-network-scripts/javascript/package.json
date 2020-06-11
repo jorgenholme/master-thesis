@@ -2,14 +2,14 @@
   "name": "nodejs",
   "version": "1.0.0",
   "description": "",
-  "main": "invoke.js",
+  "main": "instantiate.js",
   "scripts": {},
   "keywords": [],
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "fabric-network": "^2.1.0",
-    "fabric-ca-client": "^2.1.0",
+    "fabric-network": "^1.4.0",
+    "fabric-ca-client": "^1.4.0",
     "js-yaml": "^3.12.0"
   },
   "devDependencies": {
