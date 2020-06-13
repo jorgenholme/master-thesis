@@ -1,0 +1,5 @@
+---
+create_containers: 1
+default_container_name: namenode
+default_container_image: bde2020/hadoop-namenode
+default_container_command: sleep 1d

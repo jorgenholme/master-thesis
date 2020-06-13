@@ -1,0 +1,15 @@
+- hosts: remotemachine
+  gather_facts: no
+  become: true
+  remote_user: root
+
+  tasks:
+    - name: Copy job files to remote machine
+      copy:
+        src: ./job_files
+        dest: /hadoop_job
+
+    - name: Run Makefile
+      make: 
+        chdir: /hadoop_job/job_files
+        target: wordcount

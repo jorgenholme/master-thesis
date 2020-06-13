@@ -1,0 +1,14 @@
+- hosts: netherlands:spain
+  gather_facts: no
+  become: true
+  remote_user: root
+  strategy: free
+
+  tasks:
+
+    - include: run_plays.yml
+      when: ansible_host == 'netherlands'
+
+    - include: run_plays.yml
+      when: ansible_host == 'spain'
+

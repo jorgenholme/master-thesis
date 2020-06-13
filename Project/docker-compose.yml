@@ -1,0 +1,42 @@
+version: '2.1'
+
+services:
+    netherlands:
+        image: netherlands
+        build: './netherlands'
+        ports: 
+            - 5003:5003
+        tty: true
+        # storage_opt:
+        #     size: '40G'
+        volumes:
+            - ./fabric-scripts/:/fabric-scripts/
+        cap_add: # Needed for access to iptables
+            - NET_ADMIN
+        privileged: true # Needed for permission
+
+    spain:
+        image: spain
+        build: './spain'
+        ports: 
+            - 5004:5004
+        tty: true
+        volumes:
+            - ./fabric-scripts/:/fabric-scripts/
+        cap_add: # Needed for access to iptables
+            - NET_ADMIN
+        privileged: true # Needed for permission
+
+
+    control:
+        image: control
+        build: './control'
+        ports:
+            - 5001:5001
+        volumes: 
+            - ./ansible:/ansible
+            - ./control/inventory:/etc/ansible
+            - ./fabric-scripts/:/fabric-scripts/
+        tty: true
+
+
