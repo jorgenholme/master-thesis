@@ -57,7 +57,7 @@ peer:
       kubernetes.io/ingress.class: "hlf-peer"
   externalService:
     # expose peers to outer world with LoadBalancer service type?
-    enabled: false
+    enabled: true
     annotations:
   # if enabled, podAntiAffinity is used to spread the peer pods in the same organization among nodes
   # normally no need to disable this
@@ -122,7 +122,7 @@ orderer:
       kubernetes.io/ingress.class: "hlf-orderer"
   externalService:
     # expose orderers to outer world with LoadBalancer service type?
-    enabled: false
+    enabled: true
     annotations:
   # if enabled, podAntiAffinity is used to spread the orderer pods in the same organization among nodes
   # normally no need to disable this
