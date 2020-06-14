@@ -23,10 +23,9 @@ const Chaincode = class {
       } catch (err) {
         return shim.error(err);
       }
-
     }
 
-    async grantAccess(stub) {
+    async grantSpainAccess(stub) {
       const cid = new shim.ClientIdentity(stub);
 
       const dateTime = new Date().toLocaleString();
@@ -34,7 +33,22 @@ const Chaincode = class {
       const valToHash = dateTime.concat(userId);
       const digest = crypto.createHash("sha256").update(valToHash).digest("hex");
 
-      await stub.putState(userId, Buffer.from(digest));
+      await stub.putState("Spain", Buffer.from(digest));
+
+      const payload = Buffer.from(digest.toString());
+
+      return payload;
+    }
+
+    async grantNetherlandsAccess(stub) {
+      const cid = new shim.ClientIdentity(stub);
+
+      const dateTime = new Date().toLocaleString();
+      const userId = cid.getID();
+      const valToHash = dateTime.concat(userId);
+      const digest = crypto.createHash("sha256").update(valToHash).digest("hex");
+
+      await stub.putState("Netherlands", Buffer.from(digest));
 
       const payload = Buffer.from(digest.toString());
 
@@ -42,60 +56,97 @@ const Chaincode = class {
     }
 
     async accessResults(stub) {
-      const cid = new shim.ClientIdentity(stub);
-      const userId = cid.getID();
-      // const num1 = args.netherlandsNum;
-      // const num2 = args.spainNum;
+      const payload1 = await stub.getPrivateData('collectionNetherlandsStavanger', 'result');
+      const payload2 = await stub.getPrivateData('collectionSpainStavanger', 'result');
 
-      const payload1 = await stub.getPrivateData('collectionNetherlandsStavanger', '1');
-      const payload2 = await stub.getPrivateData('collectionSpainStavanger', '1');
+      const result1 = payload1.toString();
+      const result2 = payload2.toString();
 
-      const payload1String = payload1.toString();
-      const payload2String = payload2.toString();
+      const nSplit1 = (result1.split("\n"));
+      const tSplit1 = [];
+      const obj1 = {};
 
-      const payload = payload1String.concat(payload2String);
+      for (let i=0; i < nSplit1.length; i++){
+          tSplit1.push(nSplit1[i].split("\t"));
+          if (Number.isNaN(parseInt(tSplit1[i][1]))) {
+              continue;
+          }
+          obj1[tSplit1[i][0]] = parseInt(tSplit1[i][1]);
+      }
+
+      const nSplit2 = (result2.split("\n"));
+      const tSplit2 = [];
+      const obj2 = {};
+
+      for (let i=0; i < nSplit2.length; i++){
+          tSplit2.push(nSplit2[i].split("\t"));
+          if (Number.isNaN(parseInt(tSplit2[i][1]))) {
+              continue;
+          }
+          obj2[tSplit2[i][0]] = parseInt(tSplit2[i][1]);
+      }
+
+      const mergedObj = {};
+      const keys2 = Object.keys(obj2);
+
+      for (let i=0; i < keys2.length; i++){
+          var key = keys2[i];
+          if (key in obj1) {
+              mergedObj[key] = obj1[key] + obj2[key];
+          } else {
+              mergedObj[key] = obj2[key];
+          }
+      }
+
+      const keys1 = Object.keys(obj1);
+      for (let i=0; i < keys1.length; i++){
+          var key = keys1[i];
+          if (!(keys1[i] in obj2)) {
+              mergedObj[key] = obj1[key]
+          } else {
+              continue;
+          }
+      }
+
+      const payload = JSON.stringify(mergedObj);
 
       return Buffer.from(payload);
     }
 
 
     async putPrivateNetherlandsCollection(stub, args) {
-      // const cid = new shim.ClientIdentity(stub);
-      // const id = cid.getID();
       const result = args[0];
 
-      await stub.putPrivateData('collectionNetherlandsStavanger', '1', Buffer.from(result));
+      await stub.putPrivateData('collectionNetherlandsStavanger', 'result', Buffer.from(result));
 
       return Buffer.from(result.toString());
     }
 
 
     async putPrivateSpainCollection(stub, args) {
-      // const cid = new shim.ClientIdentity(stub);
-      // const id = cid.getID();
       const result = args[0];
 
-      await stub.putPrivateData('collectionSpainStavanger', '1', Buffer.from(result));
+      await stub.putPrivateData('collectionSpainStavanger', 'result', Buffer.from(result));
 
       return Buffer.from(result.toString());
     }
 
-    // async pull(stub) {
-    //   const payloadOrg2 = stub.invokeChaincode('accessOrg2');
-    //   const payloadOrg3 = stub.invokeChaincode('accessOrg3');
-
-    //   const payload = [payloadOrg2, payloadOrg3];
-
-    //   return payload;
-    // }
-
-    async query(stub) {
-      const cid = new shim.ClientIdentity(stub);
-
-      const userId = cid.getID();
-      const otc = await stub.getState(userId);
+    
+    async querySpain(stub) {
+      const otc = await stub.getState("Spain");
       if (!otc || otc.length === 0) {
-        throw new Error(`${userId} does not exist`);
+        throw new Error('OTC does not exist');
+      }
+
+      const payload = Buffer.from(otc.toString());
+
+      return payload;
+    }
+
+    async queryNetherlands(stub) {
+      const otc = await stub.getState("Netherlands");
+      if (!otc || otc.length === 0) {
+        throw new Error('OTC does not exist');
       }
 
       const payload = Buffer.from(otc.toString());

@@ -38,7 +38,7 @@ async function main() {
 
         // Submit the specified transaction.
         
-        const result = await contract.submitTransaction('grantAccess');
+        const result = await contract.submitTransaction('grantNetherlandsAccess');
         console.log(result.toString())
         console.log('Transaction has been submitted');
 

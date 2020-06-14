@@ -47,10 +47,7 @@
     },
     "orderers": {
         "orderer0.ordererOrg.com": {
-            "url": "grpc://172.17.0.3:32700",
-            "tlsCACerts": {
-                "path": "/home/jorgen/Documents/PIVT/fabric-kube/samples/ansible-network/crypto-config/ordererOrganizations/ordererOrg.com/orderers/orderer0.ordererOrg.com/msp/tlscacerts/tlsca.ordererOrg.com-cert.pem"
-            },
+            "url": "grpc://192.168.39.63:32700",
             "grpcOptions": {
                 "ssl-target-name-override": "orderer0.ordererOrg.com",
                 "grpc.keepalive_time_ms": 600000
@@ -59,14 +56,14 @@
     },
     "peers": {
         "peer0.spain.es": {
-            "url": "grpc://172.17.0.3:30002",
+            "url": "grpc://192.168.39.63:30002",
             "grpcOptions": {
                 "ssl-target-name-override": "peer0.spain.es",
                 "grpc.keepalive_time_ms": 600000
             }
         },
         "peer0.stavanger.no": {
-            "url": "grpc://172.17.0.3:30000",
+            "url": "grpc://192.168.39.63:30000",
             "grpcOptions": {
                 "ssl-target-name-override": "peer0.stavanger.no",
                 "grpc.keepalive_time_ms": 600000
@@ -74,7 +71,7 @@
         },
 
         "peer0.netherlands.nl": {
-            "url": "grpc://172.17.0.3:30001",
+            "url": "grpc://192.168.39.63:30001",
             "grpcOptions": {
                 "ssl-target-name-override": "peer0.netherlands.nl",
                 "grpc.keepalive_time_ms": 600000
@@ -83,10 +80,7 @@
     },
     "certificateAuthorities": {
         "ca-Spain": {
-            "url": "http://172.17.0.3:31702",
-            "tlsCACerts": {
-                "path": "/home/jorgen/Documents/PIVT/fabric-kube/samples/ansible-network/crypto-config/peerOrganizations/spain.es/tlsca/tlsca.spain.es-cert.pem"
-            },
+            "url": "http://192.168.39.63:31702",
             "httpOptions": {
                 "verify": false
             },
@@ -99,10 +93,7 @@
             "caName": "ca-Spain"
         },
         "ca-Netherlands": {
-            "url": "http://172.17.0.3:31701",
-            "tlsCACerts": {
-                "path": "/home/jorgen/Documents/PIVT/fabric-kube/samples/ansible-network/crypto-config/peerOrganizations/netherlands.nl/tlsca/tlsca.netherlands.nl-cert.pem"
-            },
+            "url": "http://192.168.39.63:31701",
             "httpOptions": {
                 "verify": false
             },
@@ -115,10 +106,7 @@
             "caName": "ca-Netherlands"
         },
         "ca-Stavanger": {
-            "url": "http://172.17.0.3:31700",
-            "tlsCACerts": {
-                "path": "/home/jorgen/Documents/PIVT/fabric-kube/samples/ansible-network/crypto-config/peerOrganizations/stavanger.no/tlsca/tlsca.stavanger.no-cert.pem"
-            },
+            "url": "http://192.168.39.63:31700",
             "httpOptions": {
                 "verify": false
             },
