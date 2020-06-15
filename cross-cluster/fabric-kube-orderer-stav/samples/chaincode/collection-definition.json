@@ -1,0 +1,66 @@
+[
+   {
+       "name": "collectionNetherlandsStavanger",
+       "policy": {
+           "identities": [
+               {
+                   "role": {
+                       "name": "member",
+                       "mspId": "NetherlandsMSP"
+                   }
+               },
+               {
+                   "role": {
+                       "name": "member",
+                       "mspId": "StavangerMSP"
+                   }
+               }
+           ],
+           "policy": {
+               "1-of": [
+                   {
+                       "signed-by": 0
+                   },
+                   {
+                       "signed-by": 1
+                   }
+               ]
+           }
+       },
+       "requiredPeerCount": 1,
+       "maxPeerCount": 2,
+       "blockToLive": 100
+   },
+   {
+    "name": "collectionSpainStavanger",
+    "policy": {
+        "identities": [
+            {
+                "role": {
+                    "name": "member",
+                    "mspId": "SpainMSP"
+                }
+            },
+            {
+                "role": {
+                    "name": "member",
+                    "mspId": "StavangerMSP"
+                }
+            }
+        ],
+        "policy": {
+            "1-of": [
+                {
+                    "signed-by": 0
+                },
+                {
+                    "signed-by": 1
+                }
+            ]
+        }
+    },
+    "requiredPeerCount": 1,
+    "maxPeerCount": 2,
+    "blockToLive": 100
+}
+]

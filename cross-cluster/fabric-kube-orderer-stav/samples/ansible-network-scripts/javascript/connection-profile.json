@@ -1,0 +1,122 @@
+{
+    "name": "ansible-network",
+    "description": "Testing locally",
+    "version": "1.0",
+
+    "channels": {
+        "common": {
+            "orderers": [
+                "orderer0.ordererOrg.com"
+            ],
+            "peers": {
+                "peer0.spain.es": {},
+                "peer0.netherlands.nl": {},
+                "peer0.stavanger.no": {}
+            }
+
+        }
+    },
+    "organizations": {
+        "Spain": {
+            "mspid": "SpainMSP",
+            "peers": [
+                "peer0.spain.es"
+            ],
+            "certificateAuthorities": [
+                "ca-Spain"
+            ]
+        },
+        "Stavanger": {
+            "mspid": "StavangerMSP",
+            "peers": [
+                "peer0.stavanger.no"
+            ],
+            "certificateAuthorities": [
+                "ca-Stavanger"
+            ]
+        },
+        "Netherlands": {
+            "mspid": "NetherlandsMSP",
+            "peers": [
+                "peer0.netherlands.nl"
+            ],
+            "certificateAuthorities": [
+                "ca-Netherlands"
+            ]
+        }
+    },
+    "orderers": {
+        "orderer0.ordererOrg.com": {
+            "url": "grpc://51.104.146.157:7050",
+            "grpcOptions": {
+                "ssl-target-name-override": "orderer0.ordererOrg.com",
+                "grpc.keepalive_time_ms": 600000
+            }
+        }
+    },
+    "peers": {
+        "peer0.spain.es": {
+            "url": "grpc://51.104.146.119:7051",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.spain.es",
+                "grpc.keepalive_time_ms": 600000
+            }
+        },
+        "peer0.stavanger.no": {
+            "url": "grpc://51.104.146.139:7051",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.stavanger.no",
+                "grpc.keepalive_time_ms": 600000
+            }
+        },
+
+        "peer0.netherlands.nl": {
+            "url": "grpc://20.191.49.205:7051",
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.netherlands.nl",
+                "grpc.keepalive_time_ms": 600000
+            }
+        }
+    },
+    "certificateAuthorities": {
+        "ca-Spain": {
+            "url": "http://192.168.39.63:31702",
+            "httpOptions": {
+                "verify": false
+            },
+            "registrar": [
+                {
+                    "enrollId": "admin",
+                    "enrollSecret": "adminpw"
+                }
+            ],
+            "caName": "ca-Spain"
+        },
+        "ca-Netherlands": {
+            "url": "http://192.168.39.63:31701",
+            "httpOptions": {
+                "verify": false
+            },
+            "registrar": [
+                {
+                    "enrollId": "admin",
+                    "enrollSecret": "adminpw"
+                }
+            ],
+            "caName": "ca-Netherlands"
+        },
+        "ca-Stavanger": {
+            "url": "http://192.168.39.63:31700",
+            "httpOptions": {
+                "verify": false
+            },
+            "registrar": [
+                {
+                    "enrollId": "admin",
+                    "enrollSecret": "adminpw"
+                }
+            ],
+            "caName": "ca-Stavanger"
+        }
+    }
+}

@@ -1,0 +1,30 @@
+# ---------------------------------------------------------------------------
+# "OrdererOrgs" - Definition of organizations managing orderer nodes
+# ---------------------------------------------------------------------------
+OrdererOrgs:
+  # ---------------------------------------------------------------------------
+  # Orderer
+  # ---------------------------------------------------------------------------
+  - Name: OrdererOrg
+    Domain: ordererOrg.com
+    EnableNodeOUs: true
+    Specs:
+      - Hostname: orderer0
+# ---------------------------------------------------------------------------
+# "PeerOrgs" - Definition of organizations managing peer nodes
+# ---------------------------------------------------------------------------
+PeerOrgs:
+  - Name: Stavanger
+    Domain: stavanger.no
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+    Users:
+      Count: 1
+  
+
+ExternalPeerOrgs:
+  - Name: Netherlands
+    Domain: netherlands.nl
+  - Name: Spain
+    Domain: spain.es
