@@ -2,9 +2,6 @@
 # "PeerOrgs" - Definition of organizations managing peer nodes
 # ---------------------------------------------------------------------------
 PeerOrgs:
-  - Name: Stavanger
-    Domain: stavanger.no
-  
   - Name: Netherlands
     Domain: netherlands.nl
     EnableNodeOUs: true
@@ -28,6 +25,6 @@ ExternalPeerOrgs:
 
 ExternalOrdererOrgs:
   - Name: OrdererOrg
-    Domain: ordererOrg.com
+    Domain: ordererorg.com
     Specs:
       - Hostname: orderer0

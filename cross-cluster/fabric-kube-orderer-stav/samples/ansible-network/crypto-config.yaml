@@ -6,7 +6,7 @@ OrdererOrgs:
   # Orderer
   # ---------------------------------------------------------------------------
   - Name: OrdererOrg
-    Domain: ordererOrg.com
+    Domain: ordererorg.com
     EnableNodeOUs: true
     Specs:
       - Hostname: orderer0
