@@ -14,10 +14,18 @@ RUN chmod 700 root/.ssh
 RUN touch root/.ssh/authorized_keys
 RUN chmod 600 root/.ssh/authorized_keys
 
+
 # Put public ssh key into authorized keys
 # COPY ssh/id_rsa.pub root/.ssh/authorized_keys
 
-COPY putPDCInvoke.js /PDC/
+COPY fabric-scripts /fabric-scripts/
+COPY wallet /wallet
+
+RUN cd /fabric-scripts && npm install
+
 
 # Start ssh service
-ENTRYPOINT service ssh start && bash
+# ENTRYPOINT service ssh start && bash
+
+ENTRYPOINT service ssh start && python3 /fabric-scripts/providerSpain.py && bash
+

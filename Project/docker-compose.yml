@@ -9,8 +9,8 @@ services:
         tty: true
         # storage_opt:
         #     size: '40G'
-        volumes:
-            - ./fabric-scripts/:/fabric-scripts/
+        # volumes:
+        #     - ./fabric-scripts/:/fabric-scripts/
         cap_add: # Needed for access to iptables
             - NET_ADMIN
         privileged: true # Needed for permission
@@ -21,8 +21,8 @@ services:
         ports: 
             - 5004:5004
         tty: true
-        volumes:
-            - ./fabric-scripts/:/fabric-scripts/
+        # volumes:
+        #     - ./fabric-scripts/:/fabric-scripts/
         cap_add: # Needed for access to iptables
             - NET_ADMIN
         privileged: true # Needed for permission

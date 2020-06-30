@@ -7,11 +7,11 @@ const path = require('path');
 async function main() {
     try {
         // load the network configuration
-        let ccp = JSON.parse(fs.readFileSync('../connection-profile.json', 'utf8'));
-        const user = "AdminNetherlands";
+        let ccp = JSON.parse(fs.readFileSync('/fabric-scripts/connection-profile.json', 'utf8'));
+        const user = "AdminSpain";
 
         // Create a new file system based wallet for managing identities.
-        const walletPath = path.join(process.cwd(), '/fabric-scripts/wallet');
+        const walletPath = path.join(process.cwd(), 'wallet');
         const wallet = new FileSystemWallet(walletPath);
         // console.log(`Wallet path: ${walletPath}`);
 
@@ -28,36 +28,22 @@ async function main() {
         const gateway = new Gateway();
         await gateway.connect(ccp, { wallet, identity: user, discovery: { enabled: false, asLocalhost: true } });
 
-        
         // Get the network (channel) our contract is deployed to.
         const network = await gateway.getNetwork('common');
-
 
         // Get the contract from the network.
         const contract = network.getContract('access-chaincode');
 
-        // Submit the specified transaction.
+        // Evaluate the specified transaction.
+        const result = await contract.evaluateTransaction('querySpain');
 
-        var pData;
-        const outputPath = '/hadoop_job/job_files/job_data/output/';
-        const pDataFiles = fs.readdirSync(outputPath);
-        var index = pDataFiles.indexOf('_SUCCESS');
-        if (index !== -1) pDataFiles.splice(index, 1);
-        if (pDataFiles.length === 1) {
-            pData = fs.readFileSync(path.join(outputPath, pDataFiles[0])).toString();
-        } else {
-            return "Error reading output file";
-        }
-        
-        const result = await contract.submitTransaction('putPrivateNetherlandsCollection', pData);
-        console.log(result.toString())
-        console.log('Transaction has been submitted');
+        console.log(result.toString());
 
         // Disconnect from the gateway.
         await gateway.disconnect();
-
+        
     } catch (error) {
-        console.error(`Failed to submit transaction: ${error}`);
+        console.error(`Failed to evaluate transaction: ${error}`);
         process.exit(1);
     }
 }

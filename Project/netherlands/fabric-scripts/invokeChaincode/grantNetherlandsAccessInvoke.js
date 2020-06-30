@@ -8,10 +8,10 @@ async function main() {
     try {
         // load the network configuration
         let ccp = JSON.parse(fs.readFileSync('../connection-profile.json', 'utf8'));
-        const user = "AdminSpain";
+        const user = "AdminStavanger";
 
         // Create a new file system based wallet for managing identities.
-        const walletPath = path.join(process.cwd(), '/fabric-scripts/wallet');
+        const walletPath = path.join(process.cwd(), '../wallet');
         const wallet = new FileSystemWallet(walletPath);
         // console.log(`Wallet path: ${walletPath}`);
 
@@ -36,22 +36,19 @@ async function main() {
         // Get the contract from the network.
         const contract = network.getContract('access-chaincode');
 
-        var pData;
-        const outputPath = '/hadoop_job/job_files/job_data/output/';
-        const pDataFiles = fs.readdirSync(outputPath);
-        var index = pDataFiles.indexOf('_SUCCESS');
-        if (index !== -1) pDataFiles.splice(index, 1);
-        if (pDataFiles.length === 1) {
-            pData = fs.readFileSync(path.join(outputPath, pDataFiles[0])).toString();
-        } else {
-            return "Error reading output file";
-        }
-        console.log(pData)
-        
         // Submit the specified transaction.
-        const result = await contract.submitTransaction('putPrivateSpainCollection', pData);
+        
+        const result = await contract.submitTransaction('grantNetherlandsAccess');
         console.log(result.toString())
         console.log('Transaction has been submitted');
+
+        fs.appendFile('netherlandsOtc.txt', result.toString(), function (err) {
+            if (err) {
+              console.log("Writing to file failed.")
+            } else {
+              console.log("Wrote OTC to file at ./netherlandsOtc.txt")
+            }
+          })
 
         // Disconnect from the gateway.
         await gateway.disconnect();

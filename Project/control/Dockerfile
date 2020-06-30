@@ -40,6 +40,8 @@ apt -y install vim
 
 RUN apt -y install nodejs
 RUN apt -y install npm
+RUN apt install -y python3-pip 
+RUN pip3 install Naked 
 
 # Make directories for ssh key.
 RUN mkdir root/.ssh

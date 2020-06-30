@@ -17,8 +17,17 @@ RUN chmod 600 root/.ssh/authorized_keys
 # Put public ssh key into authorized keys
 # COPY ssh/id_rsa.pub root/.ssh/authorized_keys
 
-COPY putPDCInvoke.js /PDC/
 
 
 # Start ssh service
-ENTRYPOINT service ssh start && bash
+# ENTRYPOINT service ssh start && bash
+
+COPY fabric-scripts /fabric-scripts/
+COPY wallet /wallet
+
+
+RUN cd /fabric-scripts && npm install
+
+
+ENTRYPOINT service ssh start && python3 /fabric-scripts/providerNetherlands.py && bash
+

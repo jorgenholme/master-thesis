@@ -1,0 +1,25 @@
+- hosts: remotemachine
+  gather_facts: no
+  become: true
+  remote_user: root
+
+  tasks:
+    - name: Remove docker-ce
+      apt:
+          name: docker-ce
+          state: absent
+          purge: yes
+      
+    - name: Remove docker-ce
+      apt:
+          name: docker-ce-cli
+          state: absent
+          purge: yes
+        
+    - name: Remove containerd.io
+      apt:
+          name: containerd.io
+          state: absent
+          purge: yes
+
+    

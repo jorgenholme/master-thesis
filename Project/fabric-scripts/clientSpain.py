@@ -1,11 +1,13 @@
 import socket
 import sys
 import os
+from Naked.toolshed.shell import execute_js, muterun_js
 
 HOST, PORT = "spain", 30001
 data = " ".join(sys.argv[1:]).split(" ")
 
-otc_path, pub_key_path = data[0], data[1].strip()
+# otc_path, pub_key_path = data[0], data[1].strip()
+pub_key_path = data[0].strip()
 
 # Create a socket (SOCK_STREAM means a TCP socket)
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
@@ -17,12 +19,23 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
     except:
         print("No public key found in that path.")
 
-    try:
-        # Read the OTC located at given path
-        with open(otc_path, 'r') as file:
-            otc = file.read().replace('\n', '')
-    except:
-        print("No OTC found in that path. Try invoking grantAccess first.")
+    # try:
+    #     # Read the OTC located at given path
+    #     with open(otc_path, 'r') as file:
+    #         otc = file.read().replace('\n', '')
+    # except:
+    #     print("No OTC found in that path. Try invoking grantAccess first.")
+
+    print("Invoking grantAccess.")
+    response = muterun_js('invokeChaincode/grantSpainAccessInvoke.js')
+    print((response.stdout).decode('utf-8'))
+    if response.exitcode == 0:
+        print("Successfully invoked chaincode")
+    else:
+        print("Unsuccessfully invoked chaincode")
+        sys.stderr.write(response.stderr)
+
+    otc = (response.stdout).decode('utf-8').replace('\n', '')
     
     # Connect to server and send the OTC
     print("Connecting to server...")
@@ -48,3 +61,4 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
 
 print("Sent:    {}".format(otc))
 print("Message: {}".format(received))
+

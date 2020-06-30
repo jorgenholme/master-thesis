@@ -7,11 +7,11 @@ const path = require('path');
 async function main() {
     try {
         // load the network configuration
-        let ccp = JSON.parse(fs.readFileSync('../connection-profile.json', 'utf8'));
+        let ccp = JSON.parse(fs.readFileSync('/fabric-scripts/connection-profile.json', 'utf8'));
         const user = "AdminStavanger";
 
         // Create a new file system based wallet for managing identities.
-        const walletPath = path.join(process.cwd(), '../wallet');
+        const walletPath = path.join(process.cwd(), 'wallet');
         const wallet = new FileSystemWallet(walletPath);
         // console.log(`Wallet path: ${walletPath}`);
 
@@ -40,15 +40,14 @@ async function main() {
         
         const result = await contract.submitTransaction('grantNetherlandsAccess');
         console.log(result.toString())
-        console.log('Transaction has been submitted');
 
-        fs.appendFile('netherlandsOtc.txt', result.toString(), function (err) {
-            if (err) {
-              console.log("Writing to file failed.")
-            } else {
-              console.log("Wrote OTC to file at ./netherlandsOtc.txt")
-            }
-          })
+        // fs.appendFile('netherlandsOtc.txt', result.toString(), function (err) {
+        //     if (err) {
+        //       console.log("Writing to file failed.")
+        //     } else {
+        //       console.log("Wrote OTC to file at ./netherlandsOtc.txt")
+        //     }
+        //   })
 
         // Disconnect from the gateway.
         await gateway.disconnect();

@@ -1,0 +1,68 @@
+--- 
+  - name: Copy job files to remote machine
+    copy:
+      src: ./job_files
+      dest: /hadoop_job
+
+  # - name: Run Makefile
+  #   make: 
+  #     chdir: /hadoop_job/job_files
+  #     target: wordcount
+
+
+  - name: Create /input in HDFS
+    shell: docker run --network ansible-playbooks_default --env-file hadoop.env bde2020/hadoop-base:2.0.0-hadoop3.2.1-java8 hdfs dfs -mkdir -p /input/
+    args:
+      chdir: /hadoop_job/job_files
+
+  - name: Copy datafile from local file system to HDFS
+    shell: docker run --network ansible-playbooks_default --env-file hadoop.env bde2020/hadoop-base:2.0.0-hadoop3.2.1-java8 hdfs dfs -copyFromLocal -f /opt/hadoop-3.2.1/README.txt /input/
+    args:
+      chdir: /hadoop_job/job_files
+
+  - name: Run the submit image to perform the job
+    shell: docker run --network ansible-playbooks_default --env-file hadoop.env bde2020/hadoop-submit:2.0.0-hadoop3.2.1-java8
+    args:
+      chdir: /hadoop_job/job_files
+
+  - name: Make directory on local file system to hold the job data
+    shell: docker exec namenode mkdir /job_data
+    args:
+      chdir: /hadoop_job/job_files
+
+  - name: Copy result from HDFS to namenode file system
+    shell: docker exec namenode hdfs dfs -copyToLocal /output /job_data
+    args:
+      chdir: /hadoop_job/job_files
+
+  - name: Copy result from namenode to local file system
+    shell: docker cp namenode:/job_data .
+    args:
+      chdir: /hadoop_job/job_files
+
+  - name: Remove /input in HDFS
+    shell: docker run --network ansible-playbooks_default --env-file hadoop.env bde2020/hadoop-base:2.0.0-hadoop3.2.1-java8 hdfs dfs -rm -r /output
+    args:
+      chdir: /hadoop_job/job_files
+
+  - name: Remove /output in HDFS
+    shell: docker run --network ansible-playbooks_default --env-file hadoop.env bde2020/hadoop-base:2.0.0-hadoop3.2.1-java8 hdfs dfs -rm -r /input
+    args:
+      chdir: /hadoop_job/job_files
+
+  - name: Put results in PDC
+    shell: node invokeChaincode/putPDCInvoke.js
+    args:
+      chdir: /fabric-scripts
+
+  # #Loop over the files in the output directory and store them in a list
+  # - name: Find result files
+  #   shell: (cd /hadoop_job/job_files/job_data/output; find . -maxdepth 1 -type f) | cut -d'/' -f2
+  #   register: files_to_copy
+
+  # #Fetch all the items in that list
+  # - name: Fetch results
+  #   fetch:
+  #     src: "/hadoop_job/job_files/job_data/output/{{ item }}"
+  #     dest: /results
+  #   with_items: "{{ files_to_copy.stdout_lines }}"

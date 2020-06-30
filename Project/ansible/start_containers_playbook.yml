@@ -12,6 +12,7 @@
       docker_container:
         name: "namenode"
         image: "bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8"
+        timeout: 200
         ports:
           - 9870:9870
           - 9000:9000
@@ -30,6 +31,7 @@
       docker_container:
         name: "datanode"
         image: "bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8"
+        timeout: 200
         networks:
           - name: ansible-playbooks_default
         volumes:
