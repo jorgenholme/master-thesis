@@ -1,0 +1,57 @@
+FOR MINIKUBE:
+
+CREATE NECESSARY STUFF:
+./init.sh ./samples/ansible-network/ ./samples/chaincode/
+
+LAUNCH THE NETWORK:
+helm install ./hlf-kube --name hlf-kube -f samples/ansible-network/network.yaml -f samples/ansible-network/crypto-config.yaml
+
+
+CREATE CHANNEL:
+helm template channel-flow/ -f samples/ansible-network/network.yaml -f samples/ansible-network/crypto-config.yaml | argo submit - --watch
+
+
+INSTALL, INSTANTIATE AND INVOKE CHAINCODE:
+helm template chaincode-flow/ -f samples/ansible-network/network.yaml -f samples/ansible-network/crypto-config.yaml | argo submit - --watch
+
+
+UPGRADE CHAINCODE:
+./prepare_chaincodes.sh ./samples/ansible-network/ ./samples/chaincode/
+helm upgrade hlf-kube ./hlf-kube -f samples/ansible-network/network.yaml -f samples/ansible-network/crypto-config.yaml
+helm template chaincode-flow/ -f samples/ansible-network/network.yaml -f samples/ansible-network/crypto-config.yaml --set chaincode.version=2.0 | argo submit - --watch
+
+
+BRING DOWN NETWORK:
+
+argo delete --all
+helm delete hlf-kube --purge
+
+
+ARGO:
+
+kubectl create namespace argo
+kubectl apply -n argo -f https://raw.githubusercontent.com/argoproj/argo/stable/manifests/install.yaml
+kubectl create rolebinding default-admin --clusterrole=admin --serviceaccount=default:default
+
+
+###############################
+BROKEN STATE:
+
+./init.sh ./samples/ansible-network/ ./samples/chaincode/
+
+
+helm install ./hlf-kube --name hlf-kube -f samples/ansible-network/network.yaml -f samples/ansible-network/crypto-config.yaml --set orderer.cluster.enabled=true --set peer.launchPods=false --set orderer.launchPods=false
+
+
+./collect_host_aliases.sh ./samples/ansible-network/
+
+
+helm upgrade hlf-kube ./hlf-kube -f samples/ansible-network/network.yaml -f samples/ansible-network/crypto-config.yaml -f samples/ansible-network/hostAliases.yaml --set orderer.cluster.enabled=true
+
+
+helm template channel-flow/ -f samples/ansible-network/network.yaml -f samples/ansible-network/crypto-config.yaml -f samples/ansible-network/hostAliases.yaml | argo submit - --watch
+
+
+helm template chaincode-flow/ -f samples/ansible-network/network.yaml -f samples/ansible-network/crypto-config.yaml -f samples/ansible-network/hostAliases.yaml | argo submit - --watch
+
+
