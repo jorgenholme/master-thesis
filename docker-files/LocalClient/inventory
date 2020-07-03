@@ -1,7 +1,0 @@
-[managed]
-netherlands ansible_python_interpreter=/usr/bin/python3 ansible_host=netherlands
-spain ansible_python_interpreter=/usr/bin/python3 ansible_host=spain
-
-
-[managed:vars]
-ansible_python_interpreter=/usr/bin/python3

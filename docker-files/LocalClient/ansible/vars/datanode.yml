@@ -1,5 +1,0 @@
----
-create_containers: 2
-default_container_name: datanode
-default_container_image: bde2020/hadoop-datanode
-default_container_command: sleep 1d
